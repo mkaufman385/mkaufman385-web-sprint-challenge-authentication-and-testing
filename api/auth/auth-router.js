@@ -1,7 +1,12 @@
-const router = require('express').Router();
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const router = require("express").Router();
+// const User = require('users model location goes here')
 
-router.post('/register', (req, res) => {
-  res.end('implement register, please!');
+const { BCRYPT_ROUNDS, JWT_SECRET } = require("../../config/index");
+
+router.post("/register", (req, res) => {
+  // res.end("implement register, please!");
   /*
     IMPLEMENT
     You are welcome to build additional middlewares to help with the endpoint's functionality.
@@ -29,8 +34,8 @@ router.post('/register', (req, res) => {
   */
 });
 
-router.post('/login', (req, res) => {
-  res.end('implement login, please!');
+router.post("/login", (req, res) => {
+  // res.end("implement login, please!");
   /*
     IMPLEMENT
     You are welcome to build additional middlewares to help with the endpoint's functionality.
