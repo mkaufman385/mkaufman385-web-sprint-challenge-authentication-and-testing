@@ -7,6 +7,11 @@ const { BCRYPT_ROUNDS, JWT_SECRET } = require("../../config/index");
 
 router.post("/register", (req, res) => {
   // res.end("implement register, please!");
+
+  let user = req.body;
+  const hash = bcrypt.hashSync(user.password, BCRYPT_ROUNDS);
+  user.password = hash;
+
   /*
     IMPLEMENT
     You are welcome to build additional middlewares to help with the endpoint's functionality.
