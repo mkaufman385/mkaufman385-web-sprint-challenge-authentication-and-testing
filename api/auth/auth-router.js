@@ -4,6 +4,7 @@ const router = require("express").Router();
 const User = require("../users/users-model");
 
 const { BCRYPT_ROUNDS, JWT_SECRET } = require("../../config/index");
+const { restricted } = require("../middleware/restricted");
 
 router.post("/register", (req, res, next) => {
   // res.end("implement register, please!");
@@ -45,7 +46,7 @@ router.post("/register", (req, res, next) => {
   */
 });
 
-router.post("/login", (req, res, next) => {
+router.post("/login", restricted, (req, res, next) => {
   // res.end("implement login, please!");
   let { username, password } = req.body;
   User.findBy({ username })
