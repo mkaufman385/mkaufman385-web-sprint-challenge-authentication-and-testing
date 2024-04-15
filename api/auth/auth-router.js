@@ -89,7 +89,6 @@ function buildToken(user) {
   const payload = {
     subject: user.id,
     username: user.username,
-    //add more
   };
   const options = {
     expiresIn: "1d",
