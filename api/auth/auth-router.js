@@ -31,24 +31,6 @@ router.post("/register", (req, res, next) => {
     })
     .catch((err) => next(err));
 
-  //ATTEMPT 1
-  // const { username, password } = req.body;
-  // const hash = bcrypt.hashSync(password, BCRYPT_ROUNDS);
-  // User.add({ username, password: hash })
-  //   .then((newUser) => {
-  //     res.status(201).json(newUser);
-  //   })
-  //   .catch(next);
-
-  //ATTEMPT 2
-  // let user = req.body;
-  // const hash = bcrypt.hashSync(user.password, BCRYPT_ROUNDS);
-  // user.password = hash;
-  // User.add(user)
-  //   .then((saved) => {
-  //     res.status(201).json({ message: `Welcome ${saved.username}` });
-  //   })
-  //   .catch(next);
   /*
     IMPLEMENT
     You are welcome to build additional middlewares to help with the endpoint's functionality.
@@ -90,23 +72,11 @@ router.post("/login", (req, res, next) => {
       }
 
       const token = buildToken(user);
-      res.status(200).json({ message: `Welcome back ${user.username}`, token });
+      res.status(200).json({ message: `welcome, ${user.username}`, token });
+      console.log("TOKEN: ", token);
     })
     .catch((err) => next(err));
 
-  // let { username, password } = req.body;
-  // User.findById({ username })
-  //   .then(([user]) => {
-  //     if (user && bcrypt.compareSync(password, user.password)) {
-  //       const token = buildToken(user);
-  //       res
-  //         .status(200)
-  //         .json({ message: `Welcome back ${user.username}`, token });
-  //     } else {
-  //       next({ status: 401, message: "Invalid Credentials" });
-  //     }
-  //   })
-  //   .catch(next);
   /*
     IMPLEMENT
     You are welcome to build additional middlewares to help with the endpoint's functionality.

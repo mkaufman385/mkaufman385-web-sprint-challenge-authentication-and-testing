@@ -3,7 +3,7 @@ const db = require("../../data/dbConfig");
 //USER MODEL IS NEEDED. All the user routing can be handled in the auth router
 
 function find() {
-  return db("users");
+  return db("users").select("username", "password");
 }
 
 function findBy(filter) {
@@ -11,7 +11,10 @@ function findBy(filter) {
 }
 
 function findById(user_id) {
-  return db("users").where("user_id", user_id).first();
+  return db("users")
+    .select("username", "password")
+    .where("user_id", user_id)
+    .first();
 }
 
 async function add({ username, password }) {
