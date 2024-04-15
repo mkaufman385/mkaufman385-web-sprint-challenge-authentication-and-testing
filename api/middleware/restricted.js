@@ -15,6 +15,7 @@ const restricted = (req, res, next) => {
   } else {
     next({ status: 401, message: "token required" });
   }
+  // next();
 
   /*
     IMPLEMENT

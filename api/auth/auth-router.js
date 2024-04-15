@@ -4,21 +4,51 @@ const router = require("express").Router();
 const User = require("../users/users-model");
 
 const { BCRYPT_ROUNDS, JWT_SECRET } = require("../../config/index");
-const { restricted } = require("../middleware/restricted");
 
 router.post("/register", (req, res, next) => {
-  // res.end("implement register, please!");
+  const { username, password } = req.body;
 
-  let user = req.body;
-  const hash = bcrypt.hashSync(user.password, BCRYPT_ROUNDS);
-  user.password = hash;
+  if (!username || !password) {
+    return res.status(400).json({ message: "username and password required" });
+  }
 
-  User.add(user)
-    .then((saved) => {
-      res.status(201).json({ message: `Welcome ${saved.username}` });
+  User.findBy({ username })
+    .then((existingUser) => {
+      if (existingUser.length > 0) {
+        return res.status(400).json({ message: "username taken" });
+      }
+
+      const hash = bcrypt.hashSync(password, BCRYPT_ROUNDS);
+      User.add({ username, password: hash })
+        .then((newUser) => {
+          res.status(201).json({
+            id: newUser.id,
+            username: newUser.username,
+            password: hash,
+          });
+        })
+        .catch((err) => next(err));
     })
-    .catch(next);
+    .catch((err) => next(err));
 
+  //ATTEMPT 1
+  // const { username, password } = req.body;
+  // const hash = bcrypt.hashSync(password, BCRYPT_ROUNDS);
+  // User.add({ username, password: hash })
+  //   .then((newUser) => {
+  //     res.status(201).json(newUser);
+  //   })
+  //   .catch(next);
+
+  //ATTEMPT 2
+  // let user = req.body;
+  // const hash = bcrypt.hashSync(user.password, BCRYPT_ROUNDS);
+  // user.password = hash;
+  // User.add(user)
+  //   .then((saved) => {
+  //     res.status(201).json({ message: `Welcome ${saved.username}` });
+  //   })
+  //   .catch(next);
   /*
     IMPLEMENT
     You are welcome to build additional middlewares to help with the endpoint's functionality.
@@ -46,21 +76,37 @@ router.post("/register", (req, res, next) => {
   */
 });
 
-router.post("/login", restricted, (req, res, next) => {
-  // res.end("implement login, please!");
-  let { username, password } = req.body;
+router.post("/login", (req, res, next) => {
+  const { username, password } = req.body;
+
+  if (!username || !password) {
+    return res.status(400).json({ message: "username and password required" });
+  }
+
   User.findBy({ username })
     .then(([user]) => {
-      if (user && bcrypt.compareSync(password, user.password)) {
-        const token = buildToken(user);
-        res
-          .status(200)
-          .json({ message: `Welcome back ${user.username}`, token });
-      } else {
-        next({ status: 401, message: "Invalid Credentials" });
+      if (!user || !bcrypt.compareSync(password, user.password)) {
+        return res.status(401).json({ message: "invalid credentials" });
       }
+
+      const token = buildToken(user);
+      res.status(200).json({ message: `Welcome back ${user.username}`, token });
     })
-    .catch(next);
+    .catch((err) => next(err));
+
+  // let { username, password } = req.body;
+  // User.findById({ username })
+  //   .then(([user]) => {
+  //     if (user && bcrypt.compareSync(password, user.password)) {
+  //       const token = buildToken(user);
+  //       res
+  //         .status(200)
+  //         .json({ message: `Welcome back ${user.username}`, token });
+  //     } else {
+  //       next({ status: 401, message: "Invalid Credentials" });
+  //     }
+  //   })
+  //   .catch(next);
   /*
     IMPLEMENT
     You are welcome to build additional middlewares to help with the endpoint's functionality.
