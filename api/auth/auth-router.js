@@ -47,9 +47,7 @@ router.post("/register", (req, res, next) => {
 
 router.post("/login", (req, res, next) => {
   // res.end("implement login, please!");
-
   let { username, password } = req.body;
-
   User.findBy({ username })
     .then(([user]) => {
       if (user && bcrypt.compareSync(password, user.password)) {
@@ -62,7 +60,6 @@ router.post("/login", (req, res, next) => {
       }
     })
     .catch(next);
-
   /*
     IMPLEMENT
     You are welcome to build additional middlewares to help with the endpoint's functionality.
