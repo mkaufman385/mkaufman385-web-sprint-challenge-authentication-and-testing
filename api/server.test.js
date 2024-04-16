@@ -1,6 +1,10 @@
 // Write your tests here
 test("sanity", () => {
-  expect(true).toBe(false);
+  expect(true).toBe(true);
+});
+
+test("environment is testing", () => {
+  expect(process.env.NODE_ENV).toBe("testing");
 });
 
 // dont forget beforeAll and beforeEach.
