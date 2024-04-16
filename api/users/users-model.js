@@ -10,12 +10,12 @@ function findBy(filter) {
   return db("users").where(filter);
 }
 
-function findById(user_id) {
-  return db("users")
-    .select("username", "password")
-    .where("user_id", user_id)
-    .first();
-}
+// function findById(user_id) {
+//   return db("users")
+//     .select("username", "password")
+//     .where("user_id", user_id)
+//     .first();
+// }
 
 async function add({ username, password }) {
   const [user_id] = await db("users").insert({ username, password });
@@ -25,6 +25,6 @@ async function add({ username, password }) {
 module.exports = {
   find,
   findBy,
-  findById,
+  // findById,
   add,
 };

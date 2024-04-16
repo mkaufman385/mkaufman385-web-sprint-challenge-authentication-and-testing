@@ -1,5 +1,5 @@
 const db = require("../data/dbConfig");
-const Joke = require("../api/users/users-model");
+const User = require("../api/users/users-model");
 
 // Write your tests here
 
@@ -26,15 +26,22 @@ test("environment is testing", () => {
 
 describe("find users", () => {
   test("finds all users in table", async () => {
-    const result = await Joke.find();
+    const result = await User.find();
     expect(result).toHaveLength(0);
     expect(result).toMatchObject([]);
   });
 });
 
-describe("findById", () => {
+describe("findBy", () => {
   test("resolves user by id", async () => {
-    const result = await Joke.findById();
-    expect(result);
+    // const result = await User.findBy(1);
+    // expect(result).toMatchObject({ username: "Dan Smith" });
+    await db("users").insert({ username: "testuser1", password: "password1" });
+    await db("users").insert({ username: "testuser2", password: "password2" });
+    // Call the findBy function to search for a user by username
+    const result = await User.findBy({ username: "testuser1" });
+    // Assert that the result contains the expected user
+    expect(result).toHaveLength(1); // We expect to find one user
+    expect(result[0].username).toBe("testuser1");
   });
 });
