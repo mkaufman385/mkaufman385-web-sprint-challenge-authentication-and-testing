@@ -73,7 +73,6 @@ router.post("/login", (req, res, next) => {
 
       const token = buildToken(user);
       res.status(200).json({ message: `welcome, ${user.username}`, token });
-      console.log("TOKEN: ", token);
     })
     .catch((err) => next(err));
 
