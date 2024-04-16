@@ -34,8 +34,6 @@ describe("find users", () => {
 
 describe("findBy", () => {
   test("resolves user by id", async () => {
-    // const result = await User.findBy(1);
-    // expect(result).toMatchObject({ username: "Dan Smith" });
     await db("users").insert({ username: "testuser1", password: "password1" });
     await db("users").insert({ username: "testuser2", password: "password2" });
     // Call the findBy function to search for a user by username
