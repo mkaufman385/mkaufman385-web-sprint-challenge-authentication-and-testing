@@ -3,33 +3,70 @@ const jwt = require("jsonwebtoken");
 const router = require("express").Router();
 const User = require("../users/users-model");
 
-const { BCRYPT_ROUNDS, JWT_SECRET } = require("../../config/index");
+const {
+  // BCRYPT_ROUNDS,
+  JWT_SECRET,
+} = require("../../config/index");
 
-router.post("/register", (req, res, next) => {
+router.post("/register", async (req, res, next) => {
+  // const { username, password } = req.body;
+
+  // if (!username || !password) {
+  //   return res.status(400).json({ message: "username and password required" });
+  // }
+
+  // User.findBy({ username })
+  //   .then((existingUser) => {
+  //     if (existingUser.length > 0) {
+  //       return res.status(400).json({ message: "username taken" });
+  //     }
+
+  //     const hash = bcrypt.hashSync(password, BCRYPT_ROUNDS);
+  //     User.add({ username, password: hash })
+  //       .then((newUser) => {
+  //         res.status(201).json({
+  //           id: newUser.id,
+  //           username: newUser.username,
+  //           password: hash,
+  //         });
+  //       })
+  //       .catch((err) => next(err));
+  //   })
+  //   .catch((err) => next(err));
+
   const { username, password } = req.body;
 
-  if (!username || !password) {
-    return res.status(400).json({ message: "username and password required" });
+  try {
+    if (!username || !password) {
+      return res
+        .status(400)
+        .json({ message: "username and password required" });
+    }
+
+    const existingUser = await User.findBy({ username });
+    if (existingUser.length > 0) {
+      return res.status(400).json({ message: "username taken" });
+    }
+
+    const hash = await bcrypt.hash(password, 10); // Using 10 rounds of hashing
+    const newUser = await User.add({ username, password: hash });
+
+    // Generate JWT token for the new user
+    const token = jwt.sign(
+      { id: newUser.id, username: newUser.username },
+      JWT_SECRET
+    );
+
+    // Respond with the new user and token
+    res.status(201).json({
+      id: newUser.id,
+      username: newUser.username,
+      password: hash, // Responding with the hashed password
+      token: token, // Include the generated token in the response
+    });
+  } catch (err) {
+    next(err);
   }
-
-  User.findBy({ username })
-    .then((existingUser) => {
-      if (existingUser.length > 0) {
-        return res.status(400).json({ message: "username taken" });
-      }
-
-      const hash = bcrypt.hashSync(password, BCRYPT_ROUNDS);
-      User.add({ username, password: hash })
-        .then((newUser) => {
-          res.status(201).json({
-            id: newUser.id,
-            username: newUser.username,
-            password: hash,
-          });
-        })
-        .catch((err) => next(err));
-    })
-    .catch((err) => next(err));
 
   /*
     IMPLEMENT
