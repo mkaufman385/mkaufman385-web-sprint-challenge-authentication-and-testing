@@ -48,7 +48,7 @@ router.post("/register", async (req, res, next) => {
       return res.status(400).json({ message: "username taken" });
     }
 
-    const hash = await bcrypt.hash(password, 10); // Using 10 rounds of hashing
+    const hash = await bcrypt.hash(password, 8); // Using 10 rounds of hashing
     const newUser = await User.add({ username, password: hash });
 
     // Generate JWT token for the new user
