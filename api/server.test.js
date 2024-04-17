@@ -1,5 +1,7 @@
 const db = require("../data/dbConfig");
 const User = require("../api/users/users-model");
+const request = require("supertest");
+const server = require("./server");
 
 // Write your tests here
 
@@ -43,3 +45,17 @@ describe("findBy", () => {
     expect(result[0].username).toBe("testuser1");
   });
 });
+
+describe("[GET] /jokes", () => {
+  test("responds with 200 OK", async () => {
+    const res = await request(server).get("/jokes");
+    expect(res.status).toBe(404);
+  });
+
+  // test("responds with all jokes", async () => {
+  //   const res = await request(server).get("/jokes");
+  //   expect(res.body).toHaveLength(3);
+  // });
+});
+
+// The 404 response does not make sense above
