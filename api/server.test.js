@@ -49,7 +49,7 @@ describe("findBy", () => {
 describe("[GET] /jokes", () => {
   test("responds with 200 OK", async () => {
     const res = await request(server).get("/jokes");
-    expect(res.status).toBe(404);
+    expect(res.status).toBe(200);
   });
 
   // test("responds with all jokes", async () => {
