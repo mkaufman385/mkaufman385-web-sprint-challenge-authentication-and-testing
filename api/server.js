@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
 
-// const restrict = require("./middleware/restricted.js");
+const restrict = require("./middleware/restricted.js");
 
 const authRouter = require("./auth/auth-router.js");
 const jokesRouter = require("./jokes/jokes-router.js");
@@ -14,7 +14,8 @@ server.use(cors());
 server.use(express.json());
 
 server.use("/api/auth", authRouter);
-server.use("/api/jokes", jokesRouter); // only logged-in users should have access!
+// server.use("/api/jokes", jokesRouter); // only logged-in users should have access!
+server.use("/api/jokes", restrict, jokesRouter);
 
 server.use((err, req, res, next) => {
   //eslint-disable-line

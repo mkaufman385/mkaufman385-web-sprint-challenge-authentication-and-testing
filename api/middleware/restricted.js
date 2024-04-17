@@ -8,7 +8,7 @@ const restricted = (req, res, next) => {
       if (err) {
         next({ status: 401, message: "token invalid" });
       } else {
-        req.decodedJWT = decoded;
+        req.decodedJwt = decoded;
         next();
       }
     });
