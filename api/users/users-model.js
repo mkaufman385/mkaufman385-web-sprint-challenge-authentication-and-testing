@@ -17,9 +17,20 @@ function findById(user_id) {
     .first();
 }
 
+// async function add({ username, password }) {
+//   const [user_id] = await db("users").insert({ username, password });
+//   return findById(user_id);
+// }
+
 async function add({ username, password }) {
-  const [user_id] = await db("users").insert({ username, password });
-  return findById(user_id);
+  return db("users")
+    .insert({ username, password })
+    .then(([user_id]) => {
+      return findById(user_id); // Fetch the newly inserted user
+    })
+    .catch((error) => {
+      throw error; // Throw the error to be handled by the calling code
+    });
 }
 
 module.exports = {
