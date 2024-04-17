@@ -25,6 +25,6 @@ async function add({ username, password }) {
 module.exports = {
   find,
   findBy,
-  // findById,
+  findById,
   add,
 };
