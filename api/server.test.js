@@ -48,14 +48,14 @@ describe("findBy", () => {
 
 describe("[GET] /jokes", () => {
   test("responds with 200 OK", async () => {
-    const res = await request(server).get("/jokes");
+    const res = await request(server).get("/api/jokes");
     expect(res.status).toBe(200);
   });
 
-  // test("responds with all jokes", async () => {
-  //   const res = await request(server).get("/jokes");
-  //   expect(res.body).toHaveLength(3);
-  // });
+  test("responds with all jokes", async () => {
+    const res = await request(server).get("/api/jokes");
+    expect(res.body).toHaveLength(3);
+  });
 });
 
 // The 404 response does not make sense above
